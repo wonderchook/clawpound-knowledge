@@ -1,0 +1,40 @@
+{
+  "name": "@wonderchook/clawpound-knowledge",
+  "version": "0.1.0",
+  "description": "Knowledge work loop for OpenClaw: brainstorm, plan, review, execute, and compound learnings into durable memory.",
+  "type": "module",
+  "main": "index.ts",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.1.26"
+  },
+  "devDependencies": {
+    "openclaw": "latest",
+    "typescript": "^5.9.3",
+    "vitest": "^3.2.4"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.ts"
+    ]
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wonderchook/clawpound-knowledge"
+  },
+  "keywords": [
+    "openclaw",
+    "knowledge-management",
+    "compound-knowledge",
+    "brainstorm",
+    "planning"
+  ],
+  "dependencies": {
+    "@sinclair/typebox": "^0.34.49"
+  }
+}

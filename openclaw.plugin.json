@@ -1,0 +1,24 @@
+{
+  "id": "clawpound-knowledge",
+  "name": "Clawpound Knowledge",
+  "description": "Knowledge work loop for OpenClaw: brainstorm, plan, review, execute, and compound learnings into durable memory. Inspired by EveryInc/compound-knowledge-plugin.",
+  "skills": ["./skills"],
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "knowledgeSubdir": {
+        "type": "string",
+        "description": "Subdirectory under memory/ for knowledge files. Default: knowledge"
+      },
+      "plansDir": {
+        "type": "string",
+        "description": "Directory for plan files relative to workspace. Default: plans"
+      },
+      "autoSuggestCompound": {
+        "type": "boolean",
+        "description": "Suggest compounding at session end. Default: true"
+      }
+    }
+  }
+}
