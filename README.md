@@ -8,12 +8,12 @@ Inspired by [EveryInc/compound-knowledge-plugin](https://github.com/EveryInc/com
 
 Clawpound Knowledge provides six workflow skills that form a compounding loop:
 
-1. `/kw:brainstorm` -- Brain dump capture, extract decisions/questions/constraints, search knowledge base
-2. `/kw:plan` -- Research past work, structure plans grounded in data and past learnings
-3. `/kw:confidence` -- Epistemic gut-check before proceeding
-4. `/kw:review` -- Parallel strategic alignment and data accuracy review
-5. `/kw:work` -- Execute plans batch-by-batch with progress tracking
-6. `/kw:compound` -- Extract and save learnings so the next cycle starts smarter
+1. `/kw:brainstorm` -- Get everything out of your head. Paste meeting notes, talk through a problem, dump your thinking. It'll organize, find related past work, and surface the real questions.
+2. `/kw:plan` -- Turn a brainstorm into a structured plan. Searches what you've done before, pulls in data, and writes a plan you can actually share.
+3. `/kw:confidence` -- Pause and honestly assess what you know vs. don't know. Useful before committing to a direction.
+4. `/kw:review` -- Two reviewers check your work: one for strategic alignment, one for data accuracy. Findings come back as P1/P2/P3 severity.
+5. `/kw:work` -- Execute a plan. Breaks it into tasks, works through them in batches, tracks what happened.
+6. `/kw:compound` -- After a session, extract what you learned and save it so the next cycle starts smarter.
 
 Each cycle produces learnings saved to the knowledge base, which OpenClaw's `memory_search` automatically indexes. Future planning cycles find these learnings, closing the loop.
 
