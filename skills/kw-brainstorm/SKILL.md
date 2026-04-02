@@ -87,27 +87,23 @@ Present these back as a structured summary:
 - [Any numbers, metrics, or references cited]
 ```
 
-### Step 3: Pull in references (automatic + optional)
+### Step 3: Pull in references
 
-<parallel_tasks>
+Search for related context automatically — don't ask permission for this:
 
-**Automatic searches** — Run these without asking:
-
-- Search `memory/knowledge/` for learnings related to the brain dump topics (use `kw_knowledge_search` tool if available, or `memory_search`, or grep directly)
-- Search `plans/` for related past plans
-- Search `docs/solutions/` for relevant patterns
-
-</parallel_tasks>
+- Search the knowledge base for learnings related to the brain dump topics (use `kw_knowledge_search` tool or `memory_search`)
+- Search for related past plans and brainstorms in the workspace (check `plans/` directory)
+- Look for relevant patterns or corrections from previous work
 
 For each source found:
 
 ```
-**Found:** [source name/path]
+**Found:** [source title]
 **Relevant because:** [one sentence]
 **Key takeaway:** [the useful bit]
 ```
 
-If nothing relevant is found: "No prior context found in knowledge base or plans."
+If nothing relevant is found: "No prior context found in the knowledge base."
 
 **Optional search** — After presenting automatic findings, offer:
 
@@ -182,11 +178,11 @@ Use AskUserQuestion:
 
 1. **Run `/kw:plan`** — Structure this into an actionable plan
 2. **Dig deeper** — Research a specific theme or question further
-3. **Save and continue later** — Write to `plans/brainstorm-{descriptive-name}.md`
+3. **Save and share** — Publish the brainstorm to Proof for easy access
 4. **Keep going** — Add more context or refine the themes
 
 <critical_requirement>
-If "Save" or "Run /kw:plan" is selected: ALWAYS write the brainstorm to `plans/brainstorm-{descriptive-name}.md` first. This file becomes the origin document that `/kw:plan` will search for. Never skip the file write.
+If "Save and share" or "Run /kw:plan" is selected: ALWAYS persist the brainstorm first. Publish to Proof using the /proof skill and share the link. Also save a local copy for searchability. This document becomes the origin that `/kw:plan` will find when researching.
 </critical_requirement>
 
 ## Important Rules
@@ -200,13 +196,3 @@ If "Save" or "Run /kw:plan" is selected: ALWAYS write the brainstorm to `plans/b
 * **Pull, don't push.** Ask where references might live rather than guessing. The user knows their information landscape better than you do.
 
 * **Quantity of input is fine.** A 30-minute meeting transcript is good input. Don't ask people to pre-organize before brainstorming — that defeats the purpose.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse

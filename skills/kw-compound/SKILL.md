@@ -1,6 +1,6 @@
 ---
 name: kw:compound
-description: Extract and save learnings from a completed knowledge work session. Saves to memory/knowledge/ so future plans automatically find them via memory_search.
+description: Extract and save learnings from a completed knowledge work session. Saves to the knowledge base so future plans automatically find them.
 ---
 
 # Compound
@@ -62,11 +62,10 @@ Show each learning with its classification. User can:
 
 ### Step 3: Check for duplicates
 
-For each approved learning, search existing knowledge:
+For each approved learning, search the existing knowledge base:
 
-- Use the `kw_knowledge_search` tool if available to search by tags and content
+- Use the `kw_knowledge_search` tool to search by tags and content
 - Also use `memory_search` for semantic matches
-- Or grep `memory/knowledge/` directly for key phrases
 
 If a similar learning already exists:
 
@@ -74,57 +73,47 @@ If a similar learning already exists:
 
 * Ask: "Update existing or save as new?"
 
-* If updating, edit the existing file
+* If updating, edit the existing entry
 
 ### Step 3.5: Check for stale knowledge
 
 After identifying what to save, launch the stale knowledge checker:
 
-Launch Task agent: `clawpound-knowledge:research:stale-knowledge-checker`
+Launch agent: `clawpound-knowledge:research:stale-knowledge-checker`
 - Pass: the new learning(s) being saved
 - Returns: existing entries that may be contradicted or superseded
 
 If stale entries are found, present them to the user:
 
 > "This new learning may conflict with existing knowledge:
-> - **[existing file]** says [X], but the new learning says [Y]
+> - **[existing entry]** says [X], but the new learning says [Y]
 > - Recommendation: [Update / Remove / Keep both]
 >
 > Want me to update the old entry?"
 
 <critical_requirement>
-Agents return TEXT only. They must NOT write or delete files. Only the orchestrating compound skill writes files — both new learnings and updates to stale entries.
+Only the orchestrating compound skill writes or updates entries — research agents return findings as text only.
 </critical_requirement>
 
-### Step 4: Save locally
+### Step 4: Save to the knowledge base
 
-Use the `kw_knowledge_save` tool if available. Otherwise, write each learning to `memory/knowledge/`:
+Use the `kw_knowledge_save` tool to save each learning. Each entry should include:
 
-**Filename:** `memory/knowledge/{descriptive-slug}.md`
+- **Type:** insight | playbook | correction | pattern
+- **Tags:** relevant keywords for future search
+- **Confidence:** high | medium | low
+- **Source:** brief description of what triggered this
 
-Create the directory if it doesn't exist: `mkdir -p memory/knowledge/`
+**Content structure** — each learning should cover:
 
-**File format:**
-
-```markdown
----
-type: [insight | playbook | correction | pattern]
-tags: [relevant keywords for future search]
-confidence: [high | medium | low]
-created: [today's date]
-source: [brief description of what triggered this]
----
-
-# [Learning Title]
-
-[2-4 sentences explaining the learning. Be specific enough that someone reading this in 3 months understands what happened and why it matters.]
+```
+[2-4 sentences explaining the learning. Be specific enough that someone 
+reading this in 3 months understands what happened and why it matters.]
 
 ## Context
-
 [What you were doing when you discovered this.]
 
 ## Implication
-
 [How this should change future work. Be concrete: "When doing X, always check Y first."]
 ```
 
@@ -134,9 +123,10 @@ source: [brief description of what triggered this]
 ## Compounded
 
 **Saved:**
-- memory/knowledge/{filename}.md
+- [learning title 1]
+- [learning title 2]
 
-**This learning will be surfaced by /kw:plan and memory_search** when future work touches:
+**These learnings will be surfaced by /kw:plan and knowledge search** when future work touches:
 - [list the tags that would trigger retrieval]
 ```
 
@@ -162,14 +152,4 @@ Use AskUserQuestion:
 
 * **Tags are for retrieval.** Choose tags that future searches would match on. Think: "What future question would this answer?"
 
-* **Memory integration.** Learnings saved to `memory/knowledge/` are automatically indexed by OpenClaw's `memory_search` tool, making them findable via both keyword and semantic search.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse
+* **Memory integration.** Saved learnings are automatically indexed by OpenClaw's `memory_search` tool, making them findable via both keyword and semantic search in future sessions.

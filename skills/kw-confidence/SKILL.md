@@ -25,12 +25,12 @@ Scan the conversation for the active task, plan, or workflow:
 
 * If mid-`/kw:work` — assess the current or next task
 * If mid-`/kw:plan` — assess the plan being structured
-* If a plan file exists — read it and assess the approach
+* If a plan exists — read it and assess the approach
 * If the user gave context — assess what they described
 
 If there's nothing to assess (empty session, no context):
 
-> "What should I assess? Describe what you're working on or point me to a file."
+> "What should I assess? Describe what you're working on or share what you'd like me to evaluate."
 
 ### Step 2: Assess honestly
 
@@ -44,8 +44,8 @@ Think through these areas internally — but don't output them as a checklist:
 **Rules for honest assessment:**
 
 * Assess each area independently. Don't let confidence in one area inflate another.
-* Be specific — name files, numbers, assumptions, and unknowns.
-* Don't hedge on things you're genuinely confident about. If you've read the files and the approach is proven, say so.
+* Be specific — name sources, numbers, assumptions, and unknowns.
+* Don't hedge on things you're genuinely confident about. If you've done the research and the approach is proven, say so.
 * Don't fake confidence on things you're not sure about. If your knowledge came from a quick search rather than deep familiarity, say that.
 
 ### Step 3: Produce the confidence check
@@ -55,9 +55,9 @@ Write in plain prose with this structure:
 ```
 ## Confidence Check
 
-**Confident about:** [What you know and why. Be specific — name the files
-you've read, the patterns you recognize, the experience you're drawing on.
-This can be a sentence or a short paragraph.]
+**Confident about:** [What you know and why. Be specific — name the
+sources you've checked, the patterns you recognize, the experience you're
+drawing on. This can be a sentence or a short paragraph.]
 
 **Less confident about:** [What you don't know and why it matters. Name the
 specific gaps — missing data, unverified assumptions, unfamiliar territory.
@@ -71,7 +71,7 @@ Explain what could go wrong if these gaps aren't addressed.]
 
 **If everything is high confidence**, keep it short:
 
-> **High confidence.** Task is clear, I've read the relevant files, the approach matches established patterns. No gaps I can identify. Ready to proceed.
+> **High confidence.** Task is clear, I've checked the relevant sources, the approach matches established patterns. No gaps I can identify. Ready to proceed.
 
 Don't force a full breakdown when there's nothing to break down. Two sentences is fine.
 
@@ -86,7 +86,7 @@ Use AskUserQuestion:
 1. **Proceed** — Continue with current approach
 2. **Increase confidence** — Show specific actions to resolve the gaps
 3. **Run `/kw:plan`** — Structure a plan if one doesn't exist yet
-4. **Save assessment** — Write to the active plan file or `plans/confidence-{date}.md`
+4. **Save assessment** — Publish to Proof for reference
 
 **If the user selects "Increase confidence":**
 
@@ -104,7 +104,7 @@ Produce a ranked list of specific, executable actions. Rank by impact — bigges
 Want me to start with #1?
 ```
 
-Each action must be specific enough to execute immediately. "Read `data/q4-results.csv` to confirm the $50K benchmark" not "gather more data." Note which actions Claude can do autonomously vs. which need user input.
+Each action must be specific enough to execute immediately. "Check the Q4 results to confirm the $50K benchmark" not "gather more data." Note which actions can be done autonomously vs. which need user input.
 
 Use AskUserQuestion:
 
@@ -134,24 +134,14 @@ Then continue where you left off. The confidence check is a non-destructive inte
 
 * **Never give a number.** No percentages, no 1-10 scales, no letter grades. Write in prose.
 
-* **Be specific.** "Missing Q4 data" not "some information gaps." Name files, assumptions, unknowns.
+* **Be specific.** "Missing Q4 data" not "some information gaps." Name sources, assumptions, unknowns.
 
 * **Don't hedge on what you know.** Confidence theater — hedging on everything to seem careful — is worse than overconfidence. If you've done the work, say so clearly.
 
-* **Actions must be executable.** Every item in the "increase confidence" list must be something you or the user can do right now. "Read file X" not "gather more data."
+* **Actions must be executable.** Every item in the "increase confidence" list must be something you or the user can do right now. Not vague directives.
 
 * **Non-destructive interrupt.** If invoked mid-workflow, resume exactly where you left off after. Don't restart the parent workflow.
 
 * **Keep it proportional.** High confidence = 2 sentences. Mixed confidence = a few short paragraphs. Never a wall of text.
 
 * **This is not `/kw:review`.** Confidence assesses what *you* know and don't know — your epistemic state. Review assesses whether a *finished artifact* is good enough. They're complementary, not alternatives.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse

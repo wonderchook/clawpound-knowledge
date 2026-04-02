@@ -46,31 +46,27 @@ Also determine the **detail tier** from scope signals:
 
 Pick the best fit. Default to Standard if unclear.
 
-### Step 2: Research (parallel agents + inline)
+### Step 2: Research (parallel)
 
-Launch research agents in parallel. Each returns structured findings — they do NOT write files.
+Launch research in parallel. Each source returns structured findings — agents do NOT write files.
 
-<parallel_tasks>
-
-**2a. Past work** — Launch Task agent: `clawpound-knowledge:research:past-work-researcher`
+**2a. Past work** — Launch agent: `clawpound-knowledge:research:past-work-researcher`
 - Pass: the plan request description + work type from Step 1
 - Returns: related plans, prior decisions, origin brainstorm documents
 
-**2b. Knowledge base** — Launch Task agent: `clawpound-knowledge:research:knowledge-base-researcher`
+**2b. Knowledge base** — Launch agent: `clawpound-knowledge:research:knowledge-base-researcher`
 - Pass: the plan request description + keywords
-- Returns: saved learnings from memory/knowledge/ (insights, corrections, playbooks, patterns)
+- Returns: saved learnings (insights, corrections, playbooks, patterns from past work)
 
 **2c. External research** (inline, not an agent) — If the topic would benefit from outside context:
 - Search the web for frameworks, best practices, competitive examples
 - Only run if the topic is outward-facing or novel — skip for internal operations
 
-</parallel_tasks>
+**2d. Live data** — Pull current metrics if the plan involves data. Use available project context and data sources. If none are known, ask the user where to find relevant data.
 
-**2d. Live data** — Pull current metrics if the plan involves data. Follow whatever data hierarchy exists in the project's CLAUDE.md. If none exists, ask the user where to find relevant data.
+**2e. Origin document check** — Search for brainstorm documents matching this topic. If found, this brainstorm is the origin document — reference it throughout the plan and cross-check that the plan addresses tensions and load-bearing questions from the brainstorm.
 
-**2e. Origin document check** — Search for `plans/brainstorm-*.md` files matching this topic. If found, this brainstorm is the origin document — reference it throughout the plan as `(see origin: plans/brainstorm-{name}.md)` and cross-check that the plan addresses tensions and load-bearing questions from the brainstorm.
-
-Wait for all parallel tasks to complete before proceeding.
+Wait for all research to complete before proceeding.
 
 ### Step 3: Surface what you already know
 
@@ -286,26 +282,22 @@ Use the template that matches the work type from Step 1. Each type has a differe
 [What this process needs to work — access, tools, data sources.]
 ```
 
-### Step 5: Write to plans/
+### Step 5: Publish and save
 
-* Filename: `plans/{type}-{descriptive-name}.md`
-
-* If filename already exists, append date: `plans/{type}-{name}-{YYYY-MM-DD}.md`
-
-* Always write the file BEFORE presenting options.
+Publish the plan to Proof using the `/proof` skill and share the link in chat. Also save a local copy for searchability by future `/kw:plan` and `/kw:work` invocations.
 
 ### Step 6: Offer next steps
 
 Use AskUserQuestion:
 
-**Question:** "Plan written to `plans/{filename}`. What next?"
+**Question:** "Plan ready. What next?"
 
 **Options:**
 
 1. **Run `/kw:review`** — Check strategic alignment and data accuracy
 2. **Start `/kw:work`** — Begin executing this plan
 3. **Refine** — Adjust specific sections
-4. **Open in editor** — View the full plan
+4. **Share** — Send the Proof link to someone
 
 ## Important Rules
 
@@ -318,13 +310,3 @@ Use AskUserQuestion:
 * **Don't over-template.** The template is a starting point. Skip sections that don't apply. A campaign plan doesn't need an "Architecture" section.
 
 * **Degrade gracefully.** If a data source fails or returns nothing, proceed with what you have. Note what's missing.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse

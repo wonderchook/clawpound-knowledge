@@ -1,7 +1,7 @@
 ---
 name: kw:work
 description: Execute a knowledge work plan. Break it into tasks, do the work, and track what happened. Use after planning to actually produce the deliverables.
-argument-hint: "[plan file to execute]"
+argument-hint: "[plan to execute]"
 ---
 
 <work_target> #$ARGUMENTS </work_target>
@@ -22,10 +22,10 @@ You have a plan. Now execute it. Break it into tasks, do them, track what happen
 
 ### Step 1: Load the plan
 
-Read the plan file. If no plan is specified:
+Find the plan to execute. If no plan is specified:
 
-1. Check for the most recently modified file in `plans/`
-2. Ask: "Which plan should I execute? Point me to a file."
+1. Check for the most recently modified plan in the workspace (`plans/` directory)
+2. Ask: "Which plan should I work on?"
 
 ### Step 2: Break into tasks
 
@@ -85,14 +85,14 @@ Before executing, sort tasks into **batches**:
 
 Present the execution plan to the user:
 
-> "I've grouped these into \[N] batches. Batch 1 has \[N] independent tasks I can run in parallel. Want to adjust before I start?"
+> "I've grouped these into \[N] batches. Batch 1 has \[N] independent tasks I can work on in parallel. Want to adjust before I start?"
 
 ### Step 4: Execute batch by batch
 
 **For each batch:**
 
 1. **Announce the batch** — "Starting Batch 1: \[task names]"
-2. **Launch independent tasks in parallel** — Use Task agents for tasks that don't depend on each other. For single tasks or tasks requiring heavy interaction, execute inline.
+2. **Work on independent tasks in parallel** — For tasks that don't depend on each other, work them simultaneously. For single tasks or tasks requiring heavy interaction, work inline.
 3. **Show all outputs** — Present results from the batch together
 4. **Get feedback** — "Good? Or adjust before I move to Batch 2?"
 5. **Mark complete** — Move to next batch
@@ -100,16 +100,16 @@ Present the execution plan to the user:
 **When to parallelize within a batch:**
 
 | Situation                                                                 | Approach                       |
-| ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
-| 2+ independent deliverables (e.g., 3 social posts, a brief + a data pull) | Launch as parallel Task agents |
-| Single deliverable                                                        | Execute inline                                                                        |
-| Deliverable needs back-and-forth (e.g., iterating on tone)                | Execute inline, don't delegate                                                        |
+| ------------------------------------------------------------------------- | ------------------------------ |
+| 2+ independent deliverables (e.g., 3 social posts, a brief + a data pull) | Work in parallel              |
+| Single deliverable                                                        | Execute inline                |
+| Deliverable needs back-and-forth (e.g., iterating on tone)                | Execute inline, don't delegate |
 
 **Execution principles:**
 
-* **Use what's available.** If there are MCP tools, APIs, or skills that can help, use them. Don't recreate what exists.
+* **Use what's available.** If there are tools, APIs, or skills that can help, use them. Don't recreate what exists.
 
-* **Follow project conventions.** Check CLAUDE.md for style guides, data sources, tool preferences.
+* **Follow project conventions.** Check available project context for style guides, data sources, tool preferences.
 
 * **Show, don't describe.** Produce the actual deliverable, not a description of what it would look like.
 
@@ -131,28 +131,28 @@ If you can't complete a task:
 
 ### Step 6: Track what happened
 
-As you work, maintain a running log. After each batch completes, **append the log to the plan file** under a `## Execution Log` section:
+As you work, maintain a running log. After each batch completes, update the plan with execution progress:
 
 ```
 ## Execution Log
 
 ### [timestamp] Batch 1: [batch name]
-- [Task 1] — Produced: [what], Location: [path]
-- [Task 2] — Produced: [what], Location: [path]
+- [Task 1] — Produced: [what]
+- [Task 2] — Produced: [what]
 - Notes: [anything notable]
 
 ### [timestamp] Batch 2: [batch name]
-- [Task 3] — Produced: [what], Location: [path]
+- [Task 3] — Produced: [what]
 - [Task 4] Blocked — [blocker], Next step: [what needs to happen]
 ```
 
 <critical_requirement>
-Write the execution log to the plan file after each batch. Do not keep it only in conversation. This log feeds /kw:compound with concrete material to extract learnings from.
+Persist the execution log after each batch. This log feeds /kw:compound with concrete material to extract learnings from.
 </critical_requirement>
 
 ### Step 7: Wrap up
 
-When all tasks are complete (or blocked), summarize:
+When all tasks are complete (or blocked), summarize and publish deliverables to Proof using the `/proof` skill. Share the link in chat.
 
 ```
 ## Execution Summary
@@ -160,8 +160,8 @@ When all tasks are complete (or blocked), summarize:
 **Plan:** [plan name]
 **Tasks completed:** [N] of [total]
 **Deliverables produced:**
-- [deliverable 1] — [location]
-- [deliverable 2] — [location]
+- [deliverable 1]
+- [deliverable 2]
 
 **Still open:**
 - [blocked task] — [blocker]
@@ -194,13 +194,3 @@ Use AskUserQuestion:
 * **Track everything.** The work log is how you know what happened. It also feeds `/kw:compound` with concrete results to learn from.
 
 * **Ask for feedback between batches.** Knowledge work is subjective. Check in after each batch rather than producing everything and hoping it's right. Independent tasks within a batch don't need individual sign-off.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse

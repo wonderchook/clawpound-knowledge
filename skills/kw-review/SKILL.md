@@ -1,7 +1,7 @@
 ---
 name: kw:review
 description: Multi-reviewer quality check for knowledge work. Runs strategic alignment and data accuracy reviewers on plans, briefs, and strategy docs.
-argument-hint: "[file path or content to review]"
+argument-hint: "[content to review, or reference to a recent plan]"
 ---
 
 <review_target> #$ARGUMENTS </review_target>
@@ -24,36 +24,30 @@ Two automated reviewers check your work for the errors that damage credibility: 
 
 The most recently produced artifact. Determined by context:
 
-| Situation             | What to review                                                         |
-| --------------------- | ---------------------------------------------------------------------- |
-| `/kw:plan` just ran   | The plan file it produced                                              |
-| User points to a file | That file                                                              |
-| User pastes content   | That content                                                           |
-| Ambiguous             | Ask: "What should I review? Provide a file path or paste the content." |
+| Situation             | What to review                                   |
+| --------------------- | ------------------------------------------------ |
+| `/kw:plan` just ran   | The plan it produced                             |
+| User points to content| That content                                     |
+| User pastes content   | That content                                     |
+| Ambiguous             | Ask: "What should I review? Paste the content or tell me which plan." |
 
 ## Process
 
 ### Step 1: Load the content
 
-Read the file or accept pasted content. If the content references data (metrics, conversion rates, financial figures), also load:
-
-* Any data context files referenced in the project's CLAUDE.md
-
-* Check freshness of any data files cited
+Read the content to review. If the content references data (metrics, conversion rates, financial figures), also pull in any available project context and data sources to verify against.
 
 ### Step 2: Run both reviewers in parallel
 
-<parallel_tasks>
+Launch both reviewers in parallel — they return findings as text, no file writes.
 
-1. **Strategic Alignment Reviewer** — Launch Task agent: `clawpound-knowledge:review:strategic-alignment-reviewer`
-   - Pass: the full content + any business context from the project's CLAUDE.md
-   - It checks: goal clarity, falsifiable hypothesis, success metrics, scope proportionality, resource awareness, strategic consistency
+1. **Strategic Alignment Reviewer** — Launch agent: `clawpound-knowledge:review:strategic-alignment-reviewer`
+   - Pass: the full content + any available business context
+   - Checks: goal clarity, falsifiable hypothesis, success metrics, scope proportionality, resource awareness, strategic consistency
 
-2. **Data Accuracy Reviewer** — Launch Task agent: `clawpound-knowledge:review:data-accuracy-reviewer`
-   - Pass: the full content + any data context files referenced in the project's CLAUDE.md
-   - It checks: source citations, comparison baselines, canonical definitions, freshness, caveats, hardcoded numbers
-
-</parallel_tasks>
+2. **Data Accuracy Reviewer** — Launch agent: `clawpound-knowledge:review:data-accuracy-reviewer`
+   - Pass: the full content + any available data context
+   - Checks: source citations, comparison baselines, canonical definitions, freshness, caveats, hardcoded numbers
 
 Both agents return findings in `[P1|P2|P3]` format. Wait for both to complete before proceeding.
 
@@ -119,13 +113,3 @@ Use AskUserQuestion:
 * **Be specific.** "Data might be wrong" is not useful. "Revenue cited as $X but source shows $Y as of \[date]" is.
 
 * **Credit what's good.** Don't only flag problems. Note sections that are well-grounded and clearly structured.
-
-## Pipeline Mode
-
-When invoked with `disable-model-invocation` context (e.g., from an orchestrator or automation):
-
-- Skip all AskUserQuestion prompts
-- Use sensible defaults for all choices
-- Write output files without waiting for confirmation
-- Proceed to the next suggested skill automatically
-- Output structured results that the calling context can parse
