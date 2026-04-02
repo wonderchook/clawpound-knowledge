@@ -1,5 +1,5 @@
 import { Type } from "@sinclair/typebox";
-import { optionalStringEnum, jsonResult } from "openclaw/plugin-sdk";
+import { optionalStringEnum, jsonResult } from "../lib/schema-helpers.js";
 import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
 import { searchEntries } from "../lib/knowledge-store.js";
 import { resolvePaths } from "../lib/paths.js";
