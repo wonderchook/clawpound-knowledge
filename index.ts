@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
 import { createKnowledgeSaveTool } from "./src/tools/knowledge-save.js";
 import { createKnowledgeSearchTool } from "./src/tools/knowledge-search.js";
 import { createKnowledgeCheckStaleTool } from "./src/tools/knowledge-check-stale.js";

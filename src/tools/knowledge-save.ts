@@ -1,6 +1,7 @@
 import { Type } from "@sinclair/typebox";
-import { stringEnum, jsonResult } from "openclaw/plugin-sdk";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
+import { stringEnum } from "openclaw/plugin-sdk/core";
+import { jsonResult } from "openclaw/plugin-sdk/agent-runtime";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
 import { saveEntry } from "../lib/knowledge-store.js";
 import { resolvePaths } from "../lib/paths.js";
 

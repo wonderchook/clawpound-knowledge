@@ -1,4 +1,4 @@
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
 import { listEntries } from "../lib/knowledge-store.js";
 import { resolvePaths } from "../lib/paths.js";
 

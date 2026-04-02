@@ -1,6 +1,6 @@
 import { Type } from "@sinclair/typebox";
-import { jsonResult } from "openclaw/plugin-sdk";
-import type { OpenClawPluginApi } from "openclaw/plugin-sdk";
+import { jsonResult } from "openclaw/plugin-sdk/agent-runtime";
+import type { OpenClawPluginApi } from "openclaw/plugin-sdk/core";
 import { findStaleEntries } from "../lib/knowledge-store.js";
 import { resolvePaths } from "../lib/paths.js";
 
