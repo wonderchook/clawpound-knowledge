@@ -6,14 +6,14 @@ Inspired by [EveryInc/compound-knowledge-plugin](https://github.com/EveryInc/com
 
 ## What It Does
 
-Clawpound Knowledge provides six workflow skills that form a compounding loop:
+Clawpound Knowledge gives your OpenClaw agent six knowledge work skills that form a compounding loop. Just ask naturally — "help me think through this", "plan the Q3 campaign", "review this brief" — and the agent picks the right workflow:
 
-1. `/kw:brainstorm` -- Get everything out of your head. Paste meeting notes, talk through a problem, dump your thinking. It'll organize, find related past work, and surface the real questions.
-2. `/kw:plan` -- Turn a brainstorm into a structured plan. Searches what you've done before, pulls in data, and writes a plan you can actually share.
-3. `/kw:confidence` -- Pause and honestly assess what you know vs. don't know. Useful before committing to a direction.
-4. `/kw:review` -- Two reviewers check your work: one for strategic alignment, one for data accuracy. Findings come back as P1/P2/P3 severity.
-5. `/kw:work` -- Execute a plan. Breaks it into tasks, works through them in batches, tracks what happened.
-6. `/kw:compound` -- After a session, extract what you learned and save it so the next cycle starts smarter.
+1. **Brainstorm** -- Get everything out of your head. Paste meeting notes, talk through a problem, dump your thinking. It'll organize, find related past work, and surface the real questions.
+2. **Plan** -- Turn a brainstorm into a structured plan. Searches what you've done before, pulls in data, and writes a plan you can actually share.
+3. **Confidence** -- Pause and honestly assess what you know vs. don't know. Useful before committing to a direction.
+4. **Review** -- Two reviewers check your work: one for strategic alignment, one for data accuracy. Findings come back as P1/P2/P3 severity.
+5. **Work** -- Execute a plan. Breaks it into tasks, works through them in batches, tracks what happened.
+6. **Compound** -- After a session, extract what you learned and save it so the next cycle starts smarter.
 
 Each cycle produces learnings saved to the knowledge base, which OpenClaw's `memory_search` automatically indexes. Future planning cycles find these learnings, closing the loop.
 
